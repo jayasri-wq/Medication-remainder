@@ -1,0 +1,329 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive To-Do List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <button id="homeBtn" onclick="showPage('home')" disabled>Home</button>
+        <button id="tasksBtn" onclick="showPage('tasks')" disabled>Tasks</button>
+        <button id="summaryBtn" onclick="showPage('summary')" disabled>Summary</button>
+        <button id="logoutBtn" onclick="showPage('logout')" disabled>Logout</button>
+    </nav>
+
+    <!-- Login Page -->
+    <div id="login" class="page">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p id="loginMessage"></p>
+    </div>
+
+    <!-- Home Page -->
+    <div id="home" class="page">
+        <h2>Welcome to Your To-Do List</h2>
+        <p>Organize your tasks efficiently.</p>
+        <button onclick="showPage('tasks')">Start Adding Tasks</button>
+    </div>
+
+    <!-- Task Entry Page -->
+    <div id="tasks" class="page">
+        <h2>Enter Your Tasks</h2>
+        <input type="text" id="taskInput" placeholder="Enter a task">
+        <button onclick="addTask()">Add Task</button>
+        <ul id="taskList"></ul>
+        <button onclick="showPage('summary')">End of Day Review</button>
+    </div>
+
+    <!-- Summary Page -->
+    <div id="summary" class="page">
+        <h2>What Did You Complete?</h2>
+        <ul id="summaryList"></ul>
+        <button onclick="calculateProgress()">Show Progress</button>
+        <div id="progressContainer">
+            <div id="progressBar"></div>
+            <p id="progressText"></p>
+        </div>
+        <button onclick="showPage('logout')">Finish</button>
+    </div>
+
+    <!-- Logout Page -->
+    <div id="logout" class="page">
+        <h2>You have logged out successfully.</h2>
+        <button onclick="location.reload()">Login Again</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+css
+/* General Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    text-align: center;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: white;
+    transition: background 0.5s ease-in-out;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+}
+
+/* Background Images for Different Pages */
+#login { background: url('login-bg.jpg') no-repeat center center/cover; }
+#home { background: url('home-bg.jpg') no-repeat center center/cover; }
+#tasks { background: url('tasks-bg.jpg') no-repeat center center/cover; }
+#summary { background: url('summary-bg.jpg') no-repeat center center/cover; }
+#logout { background: url('logout-bg.jpg') no-repeat center center/cover; }
+
+/* Navigation Bar */
+nav {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 12px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+nav button {
+    padding: 12px 20px;
+    border-radius: 5px;
+    border: none;
+    background: #4CAF50;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+nav button:hover {
+    background: #45a049;
+}
+
+nav button:disabled {
+    background: gray;
+    cursor: not-allowed;
+}
+
+/* Centered Content */
+.page {
+    display: none;
+    animation: fadeIn 0.5s ease-in-out;
+    width: 80%;
+    max-width: 600px;
+    height: auto;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Forms and Buttons */
+input, button {
+    display: block;
+    width: 90%;
+    max-width: 400px;
+    padding: 14px;
+    margin: 10px auto;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+}
+
+input {
+    background: rgba(255, 255, 255, 0.8);
+    color: black;
+    border: 1px solid white;
+}
+
+button {
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+/* Task List */
+ul {
+    list-style: none;
+    padding: 20px;
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+}
+
+ul li {
+    padding: 15px;
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
+/* Completed & Incomplete Tasks */
+.completed {
+    background: linear-gradient(135deg, #28a745, #218838);
+    color: white;
+    text-decoration: line-through;
+}
+
+.incomplete {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+}
+
+/* Task Completion Button */
+ul li button {
+    background: white;
+    color: black;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+ul li button:hover {
+    background: yellow;
+}
+
+/* Progress Bar */
+#progressContainer {
+    width: 80%;
+    max-width: 400px;
+    background: lightgray;
+    height: 20px;
+    border-radius: 5px;
+    margin: 20px auto;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+#progressBar {
+    height: 100%;
+    width: 0%;
+    background: #4CAF50;
+    border-radius: 5px;
+    transition: width 0.5s ease-in-out;
+}
+js
+document.addEventListener("DOMContentLoaded", function() {
+    showPage('login');
+});
+
+// Restrict Navigation Until Login
+function enableNavigation() {
+    document.getElementById("homeBtn").disabled = false;
+    document.getElementById("tasksBtn").disabled = false;
+}
+
+// Function to Show Pages Sequentially
+function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(page => {
+        page.style.display = 'none';
+    });
+    document.getElementById(pageId).style.display = 'block';
+
+    // Restrict navigation order
+    if (pageId === 'tasks') document.getElementById("summaryBtn").disabled = false;
+    if (pageId === 'summary') document.getElementById("logoutBtn").disabled = false;
+}
+
+// Login Functionality
+document.getElementById("loginForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+    
+    if (username === "user" && password === "1234") {
+        showPage("home");
+        enableNavigation();
+    } else {
+        document.getElementById("loginMessage").textContent = "Invalid credentials. Try again.";
+    }
+});
+
+// Task Management
+let tasks = [];
+
+function addTask() {
+    let taskInput = document.getElementById("taskInput");
+    if (taskInput.value.trim() === "") return;
+
+    let task = { name: taskInput.value, completed: false };
+    tasks.push(task);
+
+    updateTaskList();
+    taskInput.value = "";
+}
+
+function updateTaskList() {
+    let taskList = document.getElementById("taskList");
+    taskList.innerHTML = "";
+
+    tasks.forEach((task, index) => {
+        let li = document.createElement("li");
+        li.innerHTML = `
+            ${task.name} 
+            <button onclick="toggleComplete(${index})">✔</button>
+        `;
+        li.classList.add(task.completed ? "completed" : "incomplete");
+        taskList.appendChild(li);
+    });
+}
+
+function toggleComplete(index) {
+    tasks[index].completed = !tasks[index].completed;
+    updateTaskList();
+}
+
+// End-of-Day Summary
+function calculateProgress() {
+    let completedTasks = tasks.filter(task => task.completed).length;
+    let totalTasks = tasks.length;
+    let progress = totalTasks ? (completedTasks / totalTasks) * 100 : 0;
+
+    document.getElementById("progressBar").style.width = progress + "%";
+    document.getElementById("progressText").innerText = `Daily Progress: ${Math.round(progress)}%`;
+}
+
