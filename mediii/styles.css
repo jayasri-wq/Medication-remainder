@@ -1,0 +1,68 @@
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  color: white;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container for dynamic content */
+.container {
+  max-width: 700px;
+  margin: auto;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.65);
+  border-radius: 10px;
+  min-height: 70vh;
+}
+
+/* Navbar styling */
+.navbar {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Headings */
+h2 {
+  font-weight: bold;
+}
+
+/* Form Elements */
+.form-control {
+  border-radius: 5px;
+}
+.btn {
+  font-size: 1.2rem;
+  padding: 8px 15px;
+  margin-top: 10px;
+}
+
+/* Background styles for pages */
+.home-page {
+  background: url('images/hospital.jpg') no-repeat center center/cover;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.medication-page {
+  background: url('images/tablets.jpg') no-repeat center center/cover;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.about-page {
+  background: url('images/syringe.png') no-repeat center center/cover;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logout-page {
+  background: #333;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
